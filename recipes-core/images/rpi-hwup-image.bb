@@ -3,5 +3,8 @@ include recipes-core/images/core-image-minimal.bb
 
 # Include modules in rootfs
 IMAGE_INSTALL += " \
-	kernel-modules \
+	bmp280 \
+	i2c-tools \
+	mpu9250 \
+	test-gy-91 \
 	"
