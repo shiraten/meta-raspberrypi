@@ -1,0 +1,25 @@
+From 4564e963bcedc8ce2d09d09815c672d1c99ab4d8 Mon Sep 17 00:00:00 2001
+From: Maxime Duchene <maxime.duchene@outlook.fr>
+Date: Thu, 24 May 2018 18:58:34 +0200
+Subject: [PATCH] add-config-for-realtek-usb-wifi
+
+---
+ arch/arm/configs/bcm2709_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/configs/bcm2709_defconfig b/arch/arm/configs/bcm2709_defconfig
+index 630da1b..10d1da5 100644
+--- a/arch/arm/configs/bcm2709_defconfig
++++ b/arch/arm/configs/bcm2709_defconfig
+@@ -958,6 +958,8 @@ CONFIG_USB_SERIAL_QUALCOMM=m
+ CONFIG_USB_SERIAL_SPCP8X5=m
+ CONFIG_USB_SERIAL_SAFE=m
+ CONFIG_USB_SERIAL_SIERRAWIRELESS=m
++CONFIG_WL_REALTEK=m
++CONFIG_RTL8192EU=m
+ CONFIG_USB_SERIAL_SYMBOL=m
+ CONFIG_USB_SERIAL_TI=m
+ CONFIG_USB_SERIAL_CYBERJACK=m
+-- 
+2.7.4
+
