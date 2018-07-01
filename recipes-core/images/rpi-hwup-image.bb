@@ -3,5 +3,9 @@ include recipes-core/images/core-image-minimal.bb
 
 # Include modules in rootfs
 IMAGE_INSTALL += " \
+	kernel-modules \
 	nano \
+	PWM-tests \
+	wiringpi \
+	PWM_tests \
 	"
