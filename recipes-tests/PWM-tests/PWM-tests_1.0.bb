@@ -2,6 +2,8 @@ DESCRIPTION = "PWM test program"
 LICENSE = "CLOSED"
 PR = "r0"
 
+DEPENDS = "wiringpi"
+
 SRC_URI = " \
 	file://PWM.c \
 "
@@ -9,7 +11,7 @@ SRC_URI = " \
 S = "${WORKDIR}"
 
 do_compile() {
-	${CC} PWM.c -o test-PWM -lm
+	${CC} PWM.c -o test-PWM -lwiringPi
 }
 
 do_install() {

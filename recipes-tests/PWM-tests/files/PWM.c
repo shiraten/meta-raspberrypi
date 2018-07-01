@@ -2,7 +2,7 @@
 #include <wiringPi.h>
 
 // définition des entrée/sortie
-const int LED = 1;	// doit être la PIN 1
+const int LED = 1;	// doit être la PIN 1 (GPIO 18)
 
 // s'exécute une seule fois
 void setup()
