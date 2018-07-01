@@ -1,0 +1,8 @@
+[Unit]
+Description=Loads custom keymap
+
+[Service]
+ExecStart=/bin/sh -c '/usr/bin/loadkeys /usr/share/keymaps/i386/azerty/fr-latin1.map.gz'
+
+[Install]
+WantedBy=multi-user.target 
