@@ -7,5 +7,6 @@ IMAGE_INSTALL += " \
 	nano \
 	PWM-tests \
 	wiringpi \
-	PWM_tests \
+	PWM-tests \
+	libtar \
 	"
