@@ -2,34 +2,60 @@ DESCRIPTION = "This repository contains the source code for the ARM side \
 libraries used on Raspberry Pi. These typically are installed in /opt/vc/lib \
 and includes source for the ARM side code to interface to: EGL, mmal, GLESv2,\
 vcos, openmaxil, vchiq_arm, bcm_host, WFC, OpenVG."
-LICENSE = "Broadcom"
-LIC_FILES_CHKSUM = "file://LICENCE;md5=957f6640d5e2d2acfce73a36a56cb32f"
-
-PR = "r5"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://LICENCE;md5=0448d6488ef8cc380632b1569ee6d196"
 
 PROVIDES = "virtual/libgles2 \
             virtual/egl"
 
-COMPATIBLE_MACHINE = "raspberrypi"
+RPROVIDES_${PN} += "libgles2 egl libegl"
+
+COMPATIBLE_MACHINE = "^rpi$"
 
 SRCBRANCH = "master"
 SRCFORK = "raspberrypi"
-SRCREV = "40e377862410371a9962db79b81fd4f0f266430a"
+SRCREV = "409dfcd90bae0a09b1b8c1f718a532728d26cde2"
+
+# Use the date of the above commit as the package version. Update this when
+# SRCREV is changed.
+PV = "20180702"
 
 SRC_URI = "\
     git://github.com/${SRCFORK}/userland.git;protocol=git;branch=${SRCBRANCH} \
-    file://0001-fix-gcc-5.x-inlines.patch \
-    file://0002-fix-musl-build.patch \
-    file://0003-fix-alloc-size-uninitialized.patch \
-    file://0002-set-VMCS_INSTALL_PREFIX-to-usr.patch \
-    file://0003-cmake-generate-and-install-pkgconfig-files.patch \
-    "
-
+    file://0001-Allow-applications-to-set-next-resource-handle.patch \
+    file://0002-wayland-Add-support-for-the-Wayland-winsys.patch \
+    file://0003-wayland-Add-Wayland-example.patch \
+    file://0004-wayland-egl-Add-bcm_host-to-dependencies.patch \
+    file://0005-interface-remove-faulty-assert-to-make-weston-happy-.patch \
+    file://0006-zero-out-wl-buffers-in-egl_surface_free.patch \
+    file://0007-initialize-front-back-wayland-buffers.patch \
+    file://0008-Remove-RPC_FLUSH.patch \
+    file://0009-fix-cmake-dependency-race.patch \
+    file://0010-Fix-for-framerate-with-nested-composition.patch \
+    file://0011-build-shared-library-for-vchostif.patch \
+    file://0012-implement-buffer-wrapping-interface-for-dispmanx.patch \
+    file://0013-Implement-triple-buffering-for-wayland.patch \
+    file://0014-GLES2-gl2ext.h-Define-GL_R8_EXT-and-GL_RG8_EXT.patch \
+    file://0015-EGL-glplatform.h-define-EGL_CAST.patch \
+    file://0016-Allow-multiple-wayland-compositor-state-data-per-pro.patch \
+"
 S = "${WORKDIR}/git"
 
 inherit cmake pkgconfig
 
-EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS='-Wl,--no-as-needed'"
+ASNEEDED = ""
+
+EXTRA_OECMAKE = "-DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER_FLAGS='-Wl,--no-as-needed' \
+                 -DVMCS_INSTALL_PREFIX=${exec_prefix} \
+"
+
+EXTRA_OECMAKE_append_aarch64 = " -DARM64=ON "
+
+
+PACKAGECONFIG ?= "${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)}"
+
+PACKAGECONFIG[wayland] = "-DBUILD_WAYLAND=TRUE -DWAYLAND_SCANNER_EXECUTABLE:FILEPATH=${STAGING_BINDIR_NATIVE}/wayland-scanner,,wayland-native wayland"
+
 CFLAGS_append = " -fPIC"
 
 do_install_append () {
@@ -44,6 +70,7 @@ do_install_append () {
 # to force the .so files into the runtime package (and keep them
 # out of -dev package).
 FILES_SOLIBSDEV = ""
+INSANE_SKIP_${PN} += "dev-so"
 
 FILES_${PN} += " \
     ${libdir}/*.so \
@@ -54,3 +81,5 @@ FILES_${PN}-doc += "${datadir}/install"
 FILES_${PN}-dbg += "${libdir}/plugins/.debug"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+RDEPENDS_${PN} += "bash"
