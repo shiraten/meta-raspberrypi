@@ -5,7 +5,9 @@ include recipes-core/images/core-image-minimal.bb
 IMAGE_INSTALL += " \
 	bmp280 \
 	i2c-tools \
+	kbd-keymaps \
 	kernel-modules \
+	keyboard \
 	libtar \
 	mpu9250 \
 	nano \
